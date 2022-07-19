@@ -5,13 +5,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.junit.Test;
 import org.junit.After;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import ru.yandex.discription.OderRentPage;
-import ru.yandex.discription.OrderPage;
+
+import ru.yandex.description.MainPage;
+import ru.yandex.description.OrderPage;
+import ru.yandex.description.OrderRentPage;
 
 public class OrderTest {
     private WebDriver driver;
+    private MainPage objMainPage;
+    private OrderPage objOrderPage;
+    private OrderRentPage objOderRentPage;
 
     @Before
     public void beforeAll() {
@@ -20,27 +24,24 @@ public class OrderTest {
         driver.get("https://qa-scooter.praktikum-services.ru/");
         new WebDriverWait(driver, 10).until(
                 webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete"));
+
+        objMainPage = new MainPage(driver);
+        objOrderPage = new OrderPage(driver);
+        objOderRentPage = new OrderRentPage(driver);
+
+        objMainPage.clickUpperOrderButton();
     }
+    
     @Test
     public void clickOrderButton() {
-        driver.findElement(By.className("Button_Button__ra12g")).click();
-        driver.get("https://qa-scooter.praktikum-services.ru/order");
-        OrderPage objOrderPage = new OrderPage(driver);
         objOrderPage.order("Галина", "Мушегова", "Мирная, 37", "87001112233");
-
-        OderRentPage objOderRentPage = new OderRentPage(driver);
-        objOderRentPage.orderFinal("Оставить на улице");
-
+        objOderRentPage.checkOrderFlow("Оставить на улице");
     }
+
     @Test
     public void clickOrderButtonTwo() {
-        driver.findElement(By.className("Button_Button__ra12g")).click();
-        driver.get("https://qa-scooter.praktikum-services.ru/order");
-        OrderPage objOrderPage = new OrderPage(driver);
         objOrderPage.order("ун", "ли", "астана", "87771111110");
-
-        OderRentPage objOderRentPage = new OderRentPage(driver);
-        objOderRentPage.orderFinal(" ");
+        objOderRentPage.checkOrderFlow(" ");
     }
 
     @After

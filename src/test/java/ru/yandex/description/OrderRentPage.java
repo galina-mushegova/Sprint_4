@@ -1,11 +1,12 @@
-package ru.yandex.discription;
+package ru.yandex.description;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
-public class OderRentPage {
+public class OrderRentPage {
     private final WebDriver driver;
 
     //локатор для поля "Когда привезти самокат"
@@ -28,14 +29,15 @@ public class OderRentPage {
     private final By successModal = By.xpath("//*[contains(@class, 'Order_Modal__YZ-d3')]/*[text()[contains(.,'Заказ оформлен')]]");
 
     //конструктор класса
-    public OderRentPage(WebDriver driver){
+    public OrderRentPage(WebDriver driver){
         this.driver = driver;
     }
 
     //метод заполняет поле "Когда привезти самокат"
     public void clickWhenCome() {
         driver.findElement(whenCome).click();
-        new WebDriverWait(driver, 10);
+        new WebDriverWait(driver, 10)
+                .until(ExpectedConditions.visibilityOfElementLocated(By.className("react-datepicker__month-container")));
     }
     public void setDate() {
         driver.findElement(date).click();
@@ -43,7 +45,6 @@ public class OderRentPage {
     //метод выбирает срок аренды и заполняет поле "Срок аренды"
     public void clickRentTime() {
         driver.findElement(rentTime).click();
-        new WebDriverWait(driver, 10);
     }
     public void setSelectRentTime() {
         driver.findElement(selectRentTime).click();
@@ -72,7 +73,7 @@ public class OderRentPage {
     }
 
     //метод заполняет поля для страницы "Про аренду" и нажимает кнопку "Заказать"
-    public void orderFinal(String text) {
+    public void checkOrderFlow(String text) {
         clickWhenCome();
         setDate();
         clickRentTime();
